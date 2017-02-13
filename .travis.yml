@@ -1,0 +1,14 @@
+language: node_js
+sudo: false
+node_js:
+- stable
+- v7
+- v6
+deploy:
+  provider: npm
+  email: ethan.cfchen@gmail.com
+  api_key:
+    secure: m6O69nd2p71BkTdbzveDzLE3L9XSfmTmXS9NgziwT6LlyU5XuWc7Ws97ymT7fW9eB0CCQPg1/H1CO6CjycPwZb9IqYCAcDk8djbBFGV6P9+duof0eALkD8VjbUYdg3SKeltu2GIUD2SxrYS1Ku3YvtYZyPV+f2ItlEgN/2x+sx3M+NmzkU6YqRMMR0Z7X20tXvLcH0HryAGE4Hu2iguCSd/6dBmB5O17SmhyZTpfJcXPvTZbj+HhVEKe9j/XX1uNL76YuUgKFgfw58L0RQTOAR8WB/ib91Eq4iJvloO/UeQyTWTV750heqQaihg5Z6DcyLOxgaDTjvr2aSYTSi/VvQZkFPH3DkXO3p8XOPnL9cFYk27Tve3S/tKSPKB2AOPkikJ/4U0T2VVQQG8VqVwXEHb8MARtA/5kUj+RVBVPpCxDesDJMNeoel8MAFtDjE6NyDIyX9FmiX2qRRKUsAuTWZQ12CCL+3uG1szkT/JSVv8JQJcWbKEurUQMoRmJqFWctRJY+YTtm5bL0A4shHrpFSAggWojceAHyErUUs7Ivs7B5QJl+FANKC6VNhOjHJVElUj7uuZEnEtiNR//0zgJpAdM2q/6EHR6Ne5UBjkx5R1yxulDOU/ycj2HqGE/f++XO5EeLQi8hwWKYdSi4JZAQ8hBcmet/M8aPg+bg7fDtMU=
+  on:
+    tags: true
+    repo: ethancfchen/gulp-puglint

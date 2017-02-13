@@ -1,0 +1,30 @@
+{
+  "name": "gulp-puglint",
+  "version": "0.0.0",
+  "description": "A gulp plugin for processing files with pug-lint",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "author": {
+    "name": "ethancfchen",
+    "email": "ethan.cfchen@gmail.com",
+    "url": "https://github.com/ethancfchen"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-config-xo-space": "^0.15.0",
+    "gulp": "^3.9.1",
+    "gulp-bump": "^2.6.1",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-eslint": "^3.0.1",
+    "gulp-exclude-gitignore": "^1.1.1",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-mocha": "^3.0.1",
+    "gulp-plumber": "^1.1.0",
+    "yargs": "^6.6.0"
+  }
+}
