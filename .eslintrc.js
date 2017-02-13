@@ -5,8 +5,5 @@ module.exports = {
     node: true,
     mocha: true,
     es6: true
-  },
-  rules: {
-    'require-jsdoc': 0
   }
 };
