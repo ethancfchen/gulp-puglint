@@ -25,10 +25,13 @@
     "gulp-load-plugins": "^1.5.0",
     "gulp-mocha": "^3.0.1",
     "gulp-plumber": "^1.1.0",
+    "stream-assert": "^2.0.3",
     "yargs": "^6.6.0"
   },
   "dependencies": {
-    "pug-lint": "^2.4.0"
+    "gulp-util": "^3.0.8",
+    "pug-lint": "^2.4.0",
+    "through2": "^2.0.3"
   },
   "engines": {
     "node": ">=6.x"

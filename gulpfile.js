@@ -14,7 +14,7 @@ gulp.task('static', () => {
   return gulp.src(['**/*.js'])
     .pipe($.excludeGitignore())
     .pipe($.eslint('.eslintrc.js'))
-    .pipe($.eslint.format())
+    // .pipe($.eslint.format())
     .pipe($.eslint.failAfterError());
 });
 
@@ -28,7 +28,7 @@ gulp.task('pre-test', () => {
 });
 
 gulp.task('test', ['pre-test'], (cb) => {
-  let mochaErr;
+  let mochaErr = null;
 
   gulp.src('test/**/*.js')
     .pipe($.plumber())
@@ -60,3 +60,11 @@ gulp.task('bump', () => {
 });
 
 gulp.task('default', ['static', 'test', 'coveralls']);
+
+
+gulp.task('use',  () => {
+  const gulpPuglint = require('./');
+  gulp
+    .src('test/pug/**/*.pug')
+    .pipe(gulpPuglint());
+});
