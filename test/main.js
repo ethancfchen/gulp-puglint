@@ -3,8 +3,6 @@ const should = require('should');
 
 const fs = require('fs');
 const path = require('path');
-const File = require('vinyl');
-const stream = require('stream');
 
 const gulp = require('gulp');
 const gulpPuglint = require('../');
@@ -65,7 +63,26 @@ describe('gulp-puglint', () => {
   });
 
   describe('configuration from project level file', () => {
-    // body...
-  });
+    const projectConfig = path.join(__dirname, '../.pug-lintrc');
 
+    before((done) => {
+      fs
+        .createReadStream(path.join(__dirname, '.pug-lintrc'))
+        .pipe(assert.length(1))
+        .once('data', (data) => {
+          fs.writeFile(projectConfig, data, done);
+        });
+    });
+
+    it('should output in original format', (done) => {
+      gulp
+        .src(testFiles)
+        .pipe(gulpPuglint())
+        .pipe(assert.end(done));
+    });
+
+    after((done) => {
+      fs.unlink(projectConfig, done);
+    });
+  });
 });

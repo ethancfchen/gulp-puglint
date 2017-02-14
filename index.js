@@ -5,9 +5,7 @@ const path = require('path');
 
 const PugLint = require('pug-lint');
 const Utils = require('./src/utils');
-const PluginError = require('./src/error');
-
-
+// const PluginError = require('./src/error');
 
 /**
  * gulpPuglint - description
@@ -18,6 +16,13 @@ const PluginError = require('./src/error');
 function gulpPuglint(options) {
   const puglint = new PugLint();
 
+  /**
+   * verify - description
+   *
+   * @param  {type} string   description
+   * @param  {type} filePath description
+   * @return {type}          description
+   */
   function verify(string, filePath) {
     return puglint.checkString(string, filePath);
   }

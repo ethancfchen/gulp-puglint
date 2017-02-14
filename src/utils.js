@@ -27,7 +27,7 @@ class Utils {
    * @return {type}         description
    */
   migrateOptions(options) {
-    let config = puglintConfig.load();
+    let config = puglintConfig.load() || {};
 
     if (typeof options === 'string') {
       if (!fs.existsSync(options)) {
@@ -39,7 +39,7 @@ class Utils {
     } else if (typeof options === 'function') {
       config = Object.assign(config, options());
     } else {
-      config = Object.assign(config, options);
+      config = Object.assign(config, options || {});
     }
     return config;
   }
