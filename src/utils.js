@@ -1,25 +1,9 @@
 const fs = require('fs');
+const path = require('path');
 
 const puglintConfig = require('pug-lint/lib/config-file');
 
-const PluginError = require('./error');
-
-/**
- *
- */
-class Utils {
-
-  /**
-   * constructor - description
-   *
-   * @param  {type} pluginStream description
-   */
-  constructor(pluginStream) {
-    this.plugin = {
-      stream: pluginStream,
-    };
-  }
-
+module.exports = {
   /**
    * migrateOptions - description
    *
@@ -30,19 +14,16 @@ class Utils {
     let config = puglintConfig.load() || {};
 
     if (typeof options === 'string') {
-      if (!fs.existsSync(options)) {
-        this.plugin.stream.emit('error',
-          PluginError.create('Config file not exists: ' + options)
-        );
+      const configFilePath = path.resolve(process.cwd(), options);
+      if (!fs.existsSync(configFilePath)) {
+        throw new Error('Config file not exists: ' + configFilePath);
       }
-      config = puglintConfig.loadFromFile(options);
+      config = puglintConfig.loadFromFile(configFilePath);
     } else if (typeof options === 'function') {
       config = Object.assign(config, options());
     } else {
       config = Object.assign(config, options || {});
     }
     return config;
-  }
-}
-
-module.exports = Utils;
+  },
+};

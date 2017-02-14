@@ -5,7 +5,7 @@ const path = require('path');
 
 const PugLint = require('pug-lint');
 const Utils = require('./src/utils');
-// const PluginError = require('./src/error');
+const PluginError = require('./src/error');
 
 /**
  * gulpPuglint - description
@@ -29,8 +29,13 @@ function gulpPuglint(options) {
 
   const stream = through.obj((file, encoding, callback) => {
     const filePath = path.relative(process.cwd(), file.path);
-    const utils = new Utils(stream);
-    const config = utils.migrateOptions(options);
+    let config = {};
+
+    try {
+      config = Utils.migrateOptions(options);
+    } catch (e) {
+      stream.emit('error', PluginError.create(e.message));
+    }
 
     puglint.configure(config);
 

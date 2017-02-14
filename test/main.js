@@ -85,4 +85,13 @@ describe('gulp-puglint', () => {
       fs.unlink(projectConfig, done);
     });
   });
+
+  describe('configuration from specified file', () => {
+    it('should output in original format', (done) => {
+      gulp
+        .src(testFiles)
+        .pipe(gulpPuglint('test/.pug-lintrc'))
+        .pipe(assert.end(done));
+    });
+  });
 });
