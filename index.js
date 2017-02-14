@@ -1,9 +1,13 @@
 const through = require('through2');
 const gutil = require('gulp-util');
+const BufferStreams = require('bufferstreams');
+const path = require('path');
 
 const PugLint = require('pug-lint');
 const Utils = require('./src/utils');
 const PluginError = require('./src/error');
+
+
 
 /**
  * gulpPuglint - description
@@ -14,35 +18,37 @@ const PluginError = require('./src/error');
 function gulpPuglint(options) {
   const puglint = new PugLint();
 
+  function verify(string, filePath) {
+    return puglint.checkString(string, filePath);
+  }
+
   const stream = through.obj((file, encoding, callback) => {
+    const filePath = path.relative(process.cwd(), file.path);
     const utils = new Utils(stream);
     const config = utils.migrateOptions(options);
 
     puglint.configure(config);
 
-    let errors = null;
     let outputs = null;
 
     if (file.isNull()) {
       return callback(null, file);
     }
 
-    if (file.isBuffer()) {
-      // const error = PluginError.create('Buffers not supported!');
-      // stream.emit('error', error);
-      // return callback(error);
-    }
-
     if (file.isStream()) {
-      // const error = PluginError.create('Streams not supported!');
-      // stream.emit('error', error);
-      // return callback(error);
+      file.contents = file.contents.pipe(
+        new BufferStreams((error, buffer, done) => {
+          file.puglint = verify(String(buffer), filePath);
+          done(null, buffer);
+        })
+      );
+      return callback(null, file);
     }
 
-    errors = puglint.checkFile(file.path);
+    file.puglint = verify(file.contents.toString(), filePath);
 
-    if (errors.length) {
-      outputs = errors.map((error) => {
+    if (file.puglint.length) {
+      outputs = file.puglint.map((error) => {
         return error.message;
       }).join('\n\n');
       gutil.log(outputs);

@@ -14,7 +14,7 @@ gulp.task('static', () => {
   return gulp.src(['**/*.js'])
     .pipe($.excludeGitignore())
     .pipe($.eslint('.eslintrc.js'))
-    // .pipe($.eslint.format())
+    .pipe($.eslint.format())
     .pipe($.eslint.failAfterError());
 });
 
