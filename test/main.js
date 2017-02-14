@@ -9,39 +9,38 @@ const stream = require('stream');
 const gulp = require('gulp');
 const gulpPuglint = require('../');
 
+const testFiles = 'test/pug/**/*.pug';
+
 describe('gulp-puglint', () => {
-  describe('minimalist configuration', function() {
-    describe('in buffer mode', () => {
-      it('should check files with no outputs', (done) => {
-        gulp
-        .src('./pug/**/*.pug')
+  describe('minimalist configuration (no rules)', () => {
+    it('should do nothing, when stream file is null', (done) => {
+      gulp
+        .src('')
         .pipe(gulpPuglint())
         .pipe(assert.end(done));
-      });
     });
 
-    describe('in stream mode', () => {
-      const configPath = path.resolve(__dirname, '.pug-lintrc');
-      it('should check files with no outputs', (done) => {
-        gulp
-          .src(configPath)
-          .pipe(gulp.dest('.'))
-          .pipe(gulpPuglint())
-          .pipe(assert.end(done));
-        // // TODO
-        // done();
-      });
+    it('should check files with no outputs in buffer mode', (done) => {
+      gulp
+        .src(testFiles)
+        .pipe(gulpPuglint())
+        .pipe(assert.end(done));
+    });
+
+    it('should check files with no outputs in stream mode', (done) => {
+      gulp
+        .src(testFiles, {buffer: false})
+        .pipe(gulpPuglint())
+        .pipe(assert.end(done));
     });
   });
 
-
-
-  describe('configuration from file path', () => {
-    const configFilePath = 'no-exist-file';
+  describe('configuration from inexist file path', () => {
+    const fakeFailedFile = 'no-exist-file';
 
     before((done) => {
       fs
-        .createReadStream(configFilePath)
+        .createReadStream(fakeFailedFile)
         .once('error', (error) => {
           should.exist(error);
           error.should.have.property('code');
@@ -52,17 +51,10 @@ describe('gulp-puglint', () => {
         .pipe(assert.end(done));
     });
 
-    it('should do nothing, when stream file is null', (done) => {
-      gulp
-        .src('')
-        .pipe(gulpPuglint())
-        .pipe(assert.end(done));
-    });
-
     it('should emit error, when config file not exist', (done) => {
       gulp
-        .src('test/pug/**/*.pug')
-        .pipe(gulpPuglint(configFilePath))
+        .src(testFiles)
+        .pipe(gulpPuglint(fakeFailedFile))
         .once('error', (error) => {
           should.exist(error);
           error.message.should.startWith('Config file not exists');
@@ -71,4 +63,9 @@ describe('gulp-puglint', () => {
         .pipe(assert.end(done));
     });
   });
+
+  describe('configuration from project level file', () => {
+    // body...
+  });
+
 });

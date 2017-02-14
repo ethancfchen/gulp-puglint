@@ -20,7 +20,6 @@ class Utils {
     };
   }
 
-
   /**
    * migrateOptions - description
    *
