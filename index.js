@@ -1,13 +1,9 @@
+const through = require('through2');
 const gutil = require('gulp-util');
-const PluginError = gutil.PluginError;
 
 const PugLint = require('pug-lint');
-const puglintConfig = require('pug-lint/lib/config-file');
-
 const Utils = require('./src/utils');
-
-const PLUGIN_NAME = 'gulp-puglint';
-
+const PluginError = require('./src/error');
 
 /**
  * gulpPuglint - description
@@ -16,12 +12,14 @@ const PLUGIN_NAME = 'gulp-puglint';
  * @return {type}         description
  */
 function gulpPuglint(options) {
-  const config = puglintConfig.load();
   const puglint = new PugLint();
 
-  puglint.configure(config);
+  const stream = through.obj((file, encoding, callback) => {
+    const utils = new Utils(stream);
+    const config = utils.migrateOptions(options);
 
-  return Utils.transform((file, encoding, callback) => {
+    puglint.configure(config);
+
     let errors = null;
     let outputs = null;
 
@@ -29,18 +27,16 @@ function gulpPuglint(options) {
       return callback(null, file);
     }
 
-    // if (file.isBuffer()) {
-    //   // TODO
-    //   return callback(
-    //     new PluginError(PLUGIN_NAME, 'Buffer is not supported')
-    //   );
-    // }
+    if (file.isBuffer()) {
+      // const error = PluginError.create('Buffers not supported!');
+      // stream.emit('error', error);
+      // return callback(error);
+    }
 
     if (file.isStream()) {
-      // TODO
-      return callback(
-        new PluginError(PLUGIN_NAME, 'Streaming is not supported')
-      );
+      // const error = PluginError.create('Streams not supported!');
+      // stream.emit('error', error);
+      // return callback(error);
     }
 
     errors = puglint.checkFile(file.path);
@@ -54,6 +50,8 @@ function gulpPuglint(options) {
 
     callback(null, file);
   });
+
+  return stream;
 }
 
 gulpPuglint.result = (action) => {

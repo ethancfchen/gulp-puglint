@@ -62,7 +62,7 @@ gulp.task('bump', () => {
 gulp.task('default', ['static', 'test', 'coveralls']);
 
 
-gulp.task('use',  () => {
+gulp.task('use', () => {
   const gulpPuglint = require('./');
   gulp
     .src('test/pug/**/*.pug')
