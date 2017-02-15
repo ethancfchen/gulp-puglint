@@ -20,5 +20,18 @@ describe('src/utils', () => {
       config.should.instanceof(Object);
       done();
     });
+
+    it('should input from a function', (done) => {
+      const config = Utils.migrateOptions(() => {
+        return {
+          mockedOption: 'mockedOptionValue',
+        };
+      });
+      should.exist(config);
+      config.should.instanceof(Object);
+      config.should.have.ownProperty('mockedOption');
+      config.should.have.value('mockedOption', 'mockedOptionValue');
+      done();
+    });
   });
 });
