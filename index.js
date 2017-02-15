@@ -73,62 +73,65 @@ function gulpPuglint(options) {
 }
 
 gulpPuglint.result = (action) => {
-  // if (typeof action !== 'function') {
-  //   throw new Error('Expected callable argument');
-  // }
-  //
-  // const stream = through.obj((file, encoding, callback) => {
-  //   const linterOutputs = file.puglint;
-  //   if (linterOutputs) {
-  //     const transformCallback = Utils.handleCallback(callback, file);
-  //     Utils.tryResultAction(action, linterOutputs, transformCallback);
-  //   } else {
-  //     callback(null, file);
-  //   }
-  // });
-  //
-  // return stream;
+  if (typeof action !== 'function') {
+    throw new Error('Expected callable argument');
+  }
+
+  const stream = through.obj((file, encoding, callback) => {
+    const linterOutputs = file.puglint;
+    if (linterOutputs) {
+      const transformCallback = Utils.handleCallback(callback, file);
+      Utils.tryResultAction(action, linterOutputs, transformCallback);
+    } else {
+      callback(null, file);
+    }
+  });
+
+  return stream;
 };
 
 gulpPuglint.results = (action) => {
-  // if (typeof action !== 'function') {
-  //   throw new Error('Expected callable argument');
-  // }
-  //
-  // const results = [];
+  if (typeof action !== 'function') {
+    throw new Error('Expected callable argument');
+  }
+
+  const results = [];
   // results.errorCount = 0;
   // results.warningCount = 0;
-  //
-  // const stream = through.obj((file, encoding, callback) => {
-  //   const linterOutputs = file.puglint;
-  //   if (linterOutputs) {
-  //     results.push(linterOutputs);
-  //     results.errorCount += linterOutputs.errorCount;
-  //     results.warningCount += linterOutputs.warningCount;
-  //   }
-  //   callback(null, file);
-  // }, (callback) => {
-  //   const flushCallback = Utils.handleCallback(callback);
-  //   Utils.tryResultAction(action, results, flushCallback);
-  // });
-  //
-  // return stream;
+
+  const stream = through.obj((file, encoding, callback) => {
+    const linterOutputs = file.puglint;
+    if (linterOutputs) {
+      linterOutputs.forEach((linterOutput) => {
+        results.push(linterOutput);
+      });
+      // results.push(linterOutputs);
+      // results.errorCount += linterOutputs.errorCount;
+      // results.warningCount += linterOutputs.warningCount;
+    }
+    callback(null, file);
+  }, (callback) => {
+    const flushCallback = Utils.handleCallback(callback);
+    Utils.tryResultAction(action, results, flushCallback);
+  });
+
+  return stream;
 };
 
 gulpPuglint.failOnError = () => {
-  // return gulpPuglint.result((result) => {
-  //   const error = Utils.firstResultMessage(result, Utils.isErrorMessage);
-  //   if (!error) {
-  //     return;
-  //   }
-  //
-  //   throw Utils.createError({
-  //     name: 'PugLintError',
-  //     fileName: result.filePath,
-  //     message: error.message,
-  //     lineNumber: error.line,
-  //   });
-  // });
+  return gulpPuglint.result((result) => {
+    const error = Utils.firstResultMessage(result, Utils.isErrorMessage);
+    if (!error) {
+      return;
+    }
+
+    throw Utils.createError({
+      name: 'PugLintError',
+      fileName: result.filePath,
+      message: error.message,
+      lineNumber: error.line,
+    });
+  });
 };
 
 gulpPuglint.failAfterError = () => {
@@ -140,7 +143,14 @@ gulpPuglint.formatEach = (formatter, writable) => {
 };
 
 gulpPuglint.format = (formatter, writable) => {
-  // TODO
+  formatter = Utils.resolveFormatter(formatter);
+  writable = Utils.resolveWritable(writable);
+
+  return gulpPuglint.results((results) => {
+    if (results.length) {
+      Utils.writeResults(results, formatter, writable);
+    }
+  });
 };
 
 module.exports = gulpPuglint;

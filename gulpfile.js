@@ -66,5 +66,7 @@ gulp.task('use', () => {
   const gulpPuglint = require('./');
   gulp
     .src('test/pug/**/*.pug')
-    .pipe(gulpPuglint('test/.pug-lintrc'));
+    .pipe(gulpPuglint('test/.pug-lintrc'))
+    .pipe(gulpPuglint.format());
+    // .pipe(gulpPuglint.failAfterError());
 });

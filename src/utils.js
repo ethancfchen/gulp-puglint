@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const puglintConfig = require('pug-lint/lib/config-file');
+const defaultFormatter = require('./default-formatter');
 
 const PLUGIN_NAME = 'gulp-puglint';
 
@@ -108,5 +109,36 @@ module.exports = {
       return false;
     }
     return message.constructor === Error;
+  },
+
+  resolveFormatter(formatter) {
+    if (typeof formatter === 'string') {
+      return require(formatter);
+    }
+    if (typeof formatter === 'function') {
+      return formatter;
+    }
+    return defaultFormatter;
+  },
+
+  resolveWritable(writable) {
+    if (!writable) {
+      writable = gutil.log;
+    } else if (typeof writable.write === 'function') {
+      writable = writable.write.bind(writable);
+    }
+    return writable;
+  },
+
+  writeResults(results, formatter, writable) {
+    if (!results) {
+      results = [];
+    }
+    // const firstResult = results.find((result) => result.config);
+    // const message = formatter(results, firstResult ? firstResult.config : {});
+    const message = formatter(results);
+    if (writable && message !== null && message !== '') {
+      writable(message);
+    }
   },
 };
