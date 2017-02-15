@@ -2,9 +2,9 @@ const should = require('should');
 
 const path = require('path');
 const gutil = require('gulp-util');
-const Utils = require('../src/utils');
+const Utils = require('../lib/utils');
 
-describe('src/utils', () => {
+describe('lib/utils', () => {
   describe('createError()', () => {
     it('should throw, when input is empty.', (done) => {
       (() => {

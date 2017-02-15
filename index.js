@@ -1,10 +1,9 @@
 const through = require('through2');
-const gutil = require('gulp-util');
 const BufferStreams = require('bufferstreams');
 const path = require('path');
 
 const PugLint = require('pug-lint');
-const Utils = require('./src/utils');
+const Utils = require('./lib/utils');
 
 /**
  * gulpPuglint - description
@@ -39,8 +38,6 @@ function gulpPuglint(options) {
 
     puglint.configure(config);
 
-    // let linterOutputs = null;
-
     if (file.isNull()) {
       callback(null, file);
       return;
@@ -60,9 +57,9 @@ function gulpPuglint(options) {
     file.puglint = verify(file.contents.toString(), filePath);
 
     // if (file.puglint.length) {
-    //   linterOutputs = file.puglint.map((error) => {
-    //     return error.message;
-    //   }).join('\n\n');
+    //   const linterOutputs = file.puglint
+    //     .map((result) => result.message)
+    //     .join('\n\n');
     //   gutil.log(linterOutputs);
     // }
 

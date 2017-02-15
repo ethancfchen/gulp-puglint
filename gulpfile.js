@@ -19,7 +19,7 @@ gulp.task('static', () => {
 });
 
 gulp.task('pre-test', () => {
-  return gulp.src(['index.js', 'src/**/*.js'])
+  return gulp.src(['index.js', 'lib/**/*.js'])
     .pipe($.excludeGitignore())
     .pipe($.istanbul({
       includeUntested: true,
