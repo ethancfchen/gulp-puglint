@@ -93,8 +93,6 @@ gulpPuglint.results = (action) => {
   }
 
   const results = [];
-  // results.errorCount = 0;
-  // results.warningCount = 0;
 
   const stream = through.obj((file, encoding, callback) => {
     const linterOutputs = file.puglint;
@@ -102,9 +100,6 @@ gulpPuglint.results = (action) => {
       linterOutputs.forEach((linterOutput) => {
         results.push(linterOutput);
       });
-      // results.push(linterOutputs);
-      // results.errorCount += linterOutputs.errorCount;
-      // results.warningCount += linterOutputs.warningCount;
     }
     callback(null, file);
   }, (callback) => {
