@@ -184,9 +184,7 @@ describe('lib/utils', () => {
     }];
 
     it('should return message on given condition.', (done) => {
-      const result = Utils.firstResultMessage({
-        messages: mockMessages,
-      }, (message) => {
+      const result = Utils.firstResultMessage(mockMessages, (message) => {
         return message.id <= 2;
       });
 
@@ -199,9 +197,7 @@ describe('lib/utils', () => {
     });
 
     it('should return null if messages is empty.', (done) => {
-      const result = Utils.firstResultMessage({
-        // empty
-      }, (message) => {
+      const result = Utils.firstResultMessage(null, (message) => {
         return message.id <= 2;
       });
 

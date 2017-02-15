@@ -67,7 +67,7 @@ gulp.task('use', () => {
   gulp
     .src('test/pug/**/*.pug')
     .pipe(gulpPuglint('test/.pug-lintrc'))
-    .pipe(gulpPuglint.failOnError())
-    // .pipe(gulpPuglint.format());
+    // .pipe(gulpPuglint.failOnError());
+    .pipe(gulpPuglint.format());
     // .pipe(gulpPuglint.failAfterError());
 });
